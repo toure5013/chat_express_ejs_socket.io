@@ -17,19 +17,24 @@ io.sockets.on('connection', (socket) => {
 
     console.log("connecter ......")
 
+
+    //faire un bodcast à tout les client
+    socket.broadcast.emit('newUser', 'Un nouveau utilisateur vient de se connecter')
+
+    //console.log(socket.id);
+
     var messageEnvoyer = ""
         //Mon evènement
     socket.on('message', (mesgRcu) => {
         console.log(messageEnvoyer);
         messageEnvoyer = mesgRcu;
-        //io.emit("newmsgrecive", messageEnvoyer)
-        socket.broadcast.emit("newmsgrecive", messageEnvoyer);
+        //io.emit("newmsgrecive", messageEnvoyer) // A tout le monde l'envoyeur compris
+        socket.emit("monmsg", messageEnvoyer); // envoi ceci à l'utilisateur
+        socket.broadcast.emit("newmsgrecive", messageEnvoyer); // envoi ceci à tout les autres
     });
 
 
-    //faire un bodcast à tout les client
-    socket.broadcast.emit('newUser', 'Un nouveau utilisateur vient de se connecter')
-        //Socket deconnecter
+    //Socket deconnecter
     socket.on('disconnect', () => {
         console.log("bye bye");
         io.emit('newUser', 'Un nouveau utilisateur s\'est déconnecter')
