@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="stylesheet" href="assets/fontawesome-free-5.13.0-web/css/all.min.css">
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="assets/jquery.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/fontawesome-free-5.13.0-web/js/all.min.js"></script>
+    <!-- <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous"> -->
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="row center bt-3">
+            <div class="col-md-8 col-lg-6 chat">
+                <div class="card">
+                    <div class="card-header msg_head">
+                        <div class="d-flex bd-highlight">
+                            <div class="img_cont">
+                                <img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" class="rounded-circle user_img">
+                                <span class="online_icon"></span>
+                            </div>
+                            <div class="user_info">
+                                <span>Chat avec .....</span>
+                                <p> ..... nbre Messages</p>
+                            </div>
+                            <div class="video_cam">
+                                <span><i class="fas fa-video"></i></span>
+                                <span><i class="fas fa-phone"></i></span>
+                            </div>
+                        </div>
+                        <span id="action_menu_btn"><i class="fas fa-ellipsis-v"></i></span>
+                        <div class="action_menu">
+                            <ul>
+                                <li><i class="fas fa-user-circle"></i> View profile</li>
+                                <li><i class="fas fa-users"></i> Add to close friends</li>
+                                <li><i class="fas fa-plus"></i> Add to group</li>
+                                <li><i class="fas fa-ban"></i> Block</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="card-body msg_card_body" id="chatBody">
+                        <!-- CONTEU DU MESAGE ICI -->
+                    </div>
+
+                    <!-- Champ de saisi -->
+                    <div class="card-footer">
+                        <div class="input-group">
+                            <div class="input-group-append">
+                                <button class="input-group-text attach_btn">
+                            <i class="fas fa-paperclip"></i>
+                        </button>
+                            </div>
+                            <textarea name="" id="msg" class="form-control type_msg" placeholder="votre message ici"></textarea>
+                            <div class="input-group-append">
+                                <button class="input-group-text send_btn" onclick="envoyerMessage()">
+                            <i class="fas fa-location-arrow"></i>
+                        </button>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+
+
+    <script>
+        var idUser = "";
+        $(document).ready(function() {
+            $('#action_menu_btn').click(function() {
+                $('.action_menu').toggle();
+            });
+        });
+
+        var socket = io();
+
+        function envoyerMessage() {
+            var date = new Date();
+            var message = document.getElementById('msg').value;
+            var temp = `<div class="d-flex justify-content-start mb-4">
+                            <div class="img_cont_msg">
+                                <img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" class="rounded-circle user_img_msg">
+                            </div>
+                            <div class="msg_cotainer">
+                                ${message}
+                                <span class="msg_time">${date.getHours()} :  ${date.getMinutes()}</span>
+                            </div>
+                        </div>`
+            document.getElementById('msg').value = '';
+            $('#chatBody').append(temp);
+            socket.emit('message', {
+                content: message,
+                importance: 1
+            });
+        }
+
+
+
+
+        //Afficher le message chez tout les utilisateurs
+        socket.on('newmsgrecive', (message) => {
+            var date = new Date();
+            var temp = `<div class="d-flex justify-content-end mb-4">
+                            <div class="msg_cotainer_send">
+                                ${message.content}
+                                <span class="msg_time_send">${date.getHours()} :  ${date.getMinutes()}</span>
+                            </div>
+                            <div class="img_cont_msg">
+                                <img src="...." class="rounded-circle user_img_msg">
+                            </div>
+                        </div>`
+
+
+            $('#chatBody').append(temp);
+        });
+        socket.on('newUser', (message) => {
+            console.log(message);
+        });
+    </script>
+</body>
+
+</html>
