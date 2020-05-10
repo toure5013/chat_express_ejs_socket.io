@@ -1,5 +1,5 @@
 // 'use strict'
-const PORT = 8080;
+const PORT = process.env.PORT || 8080;
 const express = require('express');
 const app = express(); //cette est pareil const app = require('express')();
 const http = require('http').createServer(app);
