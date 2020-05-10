@@ -9,13 +9,13 @@ app.set('view engine', 'ejs');
 app.use(express.static(__dirname + '/PUBLIC'));
 
 app.get("/", (req, res) => {
-    res.render("index")
+    res.render("groupe")
 })
 
 
 io.sockets.on('connection', (socket) => {
 
-    console.log("connecter ......")
+    console.log("User connected with socket id :  " + socket.id);
 
 
     //faire un bodcast à tout les client
@@ -36,7 +36,7 @@ io.sockets.on('connection', (socket) => {
 
     //Socket deconnecter
     socket.on('disconnect', () => {
-        console.log("bye bye");
+        console.log("User disconnected with socket id :  " + socket.id);
         io.emit('newUser', 'Un nouveau utilisateur s\'est déconnecter')
     })
 })

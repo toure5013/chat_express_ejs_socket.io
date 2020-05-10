@@ -4,8 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-
+    <title>Chat</title>
     <!-- ****************************** STYLE ../PUBLIC/ ****************************** -->
 
     <link rel="stylesheet" href="assets/style/bootstrap/css/bootstrap.min.css">
@@ -18,75 +17,117 @@
     <script src="assets/style/bootstrap/js/bootstrap.min.js"></script>
     <script src="assets/style/fontawesome-free-5.13.0-web/js/all.min.js"></script>
     <script src="assets/style/toastr/toastr.js"></script>
-
 </head>
-<!-- ../PUBLIC/ -->
 
 <body>
-
     <div class="container">
-        <div class="row center bt-3">
-            <div class="col-md-8 col-lg-6 chat">
-                <div class="card">
-                    <div class="card-header msg_head">
-                        <div class="d-flex bd-highlight">
-                            <div class="img_cont">
-                                <img src="https://static.turbosquid.com/Preview/001292/481/WV/_D.jpg" class="rounded-circle user_img">
-                                <span class="online_icon"></span>
-                            </div>
-                            <div class="user_info">
-                                <span>Chat avec .....</span>
-                                <p> ..... nbre Messages</p>
-                            </div>
-                            <div class="video_cam">
-                                <span><i class="fas fa-video"></i></span>
-                                <span><i class="fas fa-phone"></i></span>
-                            </div>
-                        </div>
-                        <span id="action_menu_btn"><i class="fas fa-ellipsis-v"></i></span>
-                        <div class="action_menu">
-                            <ul>
-                                <li><i class="fas fa-user-circle"></i> View profile</li>
-                                <li><i class="fas fa-users"></i> Add to close friends</li>
-                                <li><i class="fas fa-plus"></i> Add to group</li>
-                                <li><i class="fas fa-ban"></i> Block</li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="card-body msg_card_body" id="chatBody">
-                        <!-- CONTEU DU MESAGE ICI -->
-                    </div>
+        <div class="row ">
+            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3">
+                <ul id="userlist">
 
-                    <!-- Champ de saisi -->
-                    <div class="card-footer">
+                </ul>
+            </div>
+
+            <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                <div class="row">
+                    <form class="form-inline" onsubmit="return enterUserName()">
+                        <div class="form-group">
+                            <input class="form-control" type="text" name="userame" id="username" value="toure5013">
+                            <button type="submit" class="btn btn-primary">Entrer</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="row mt-4">
+                    <form class="form-inline" onsubmit="return sendMessage()">
                         <div class="input-group">
-                            <div class="input-group-append">
-                                <button class="input-group-text attach_btn">
-                            <i class="fas fa-paperclip"></i>
-                        </button>
-                            </div>
-                            <textarea name="" id="msg" class="form-control type_msg" placeholder="votre message ici"></textarea>
-                            <div class="input-group-append">
-                                <button class="input-group-text send_btn" onclick="envoyerMessage()">
-                            <i class="fas fa-location-arrow"></i>
-                        </button>
-
-                            </div>
+                            <textarea name="message" id="message" placeholder="Votre message" class="form-control" rows="1"></textarea>
+                            <button type="submit" class="btn btn-success">Envoyer</button>
                         </div>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>
 
+        <div class="row">
+            <ul id="messagelist">
 
+            </ul>
+        </div>
     </div>
 
 
 
+
     <!-- Appelle du module socket -->
-    <script src="assets/main/style.js"></script>
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="assets/main/main.js"></script>
+    <script src=" assets/main/style.js "></script>
+    <script src="/socket.io/socket.io.js "></script>
+    <script>
+        var io = io('http://localhost:8080');
+        //params
+        var sender = "";
+        var receiver = "";
+        //Js code here
+        function enterUserName() {
+            var username = $('#username').val();
+            //save my name to global variable
+            sender = username
+                //send username to server
+            io.emit('user_connected', {
+                username: username,
+                importance: 1
+            });
+
+            return false;
+        }
+
+        //Listen to the server
+        io.on('user_connected', (username) => {
+            console.log(username);
+            toastr.info(username + " connected!");
+            var tempuserlist = `<li><button class="btn btn-xs btn-success" onclick='onUserSelected(this.innerHTML)'>${username}</button></li>`;
+            $('#userlist').append(tempuserlist)
+        });
+
+        //User selected
+        function onUserSelected(username) {
+            console.log('receiver : ---- ' + username);
+            receiver = username;
+        }
+
+
+        //send Message
+        function sendMessage() {
+            var messageContent = $('#message').val();
+            if (receiver == "") {
+                toastr.warning("Veuillez selectionner un destinataire ! ");
+                return false;
+            }
+            if (sender == "") {
+                toastr.warning("Connectez-vous au chat svp ! ");
+                return false;
+            }
+            var data = {
+                sender: sender,
+                receiver: receiver,
+                message: messageContent
+            };
+            io.emit('send_message', {
+                sender: sender,
+                receiver: receiver,
+                message: messageContent
+            });
+            var tempnewmessage = "<li> You say :  " + messageContent + '</li>';
+            $('#messagelist').append(tempnewmessage);
+            return false;
+        }
+
+        //new message received 
+        io.on('new_message', function(data) {
+            var tempnewmessage = "<li>" + data.sender + " say :  " + data.message + '</li>';
+            $('#messagelist').append(tempnewmessage);
+        });
+    </script>
+
 </body>
 
 </html>
