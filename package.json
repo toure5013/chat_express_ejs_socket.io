@@ -5,8 +5,8 @@
     "main": "app.js",
     "scripts": {
         "test": "DEBUG=socket.io* node app-express",
-        "start": "nodemon server",
-        "groupe": "nodemon app-express"
+        "start": "node app-express",
+        "personal": "node server"
     },
     "keywords": [],
     "author": "",
