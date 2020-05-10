@@ -41,7 +41,7 @@ socket.on('newmsgrecive', (message) => {
                         <span class="msg_time_send">${date.getHours()} h:  ${date.getMinutes()} min</span>
                     </div>
                     <div class="img_cont_msg">
-                        <img src="" class="rounded-circle user_img_msg">
+                        <img src="assets/images/other.png" class="rounded-circle user_img_msg">
                     </div>
                 </div>`
     $('#chatBody').append(temp);
