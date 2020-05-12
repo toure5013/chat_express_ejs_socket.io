@@ -12,7 +12,6 @@ app.get("/", (req, res) => {
     res.render("groupe")
 })
 
-
 io.sockets.on('connection', (socket) => {
 
     console.log("User connected with socket id :  " + socket.id);

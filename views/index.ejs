@@ -61,72 +61,7 @@
     <!-- Appelle du module socket -->
     <script src=" assets/main/style.js "></script>
     <script src="/socket.io/socket.io.js "></script>
-    <script>
-        var io = io('http://localhost:8080');
-        //params
-        var sender = "";
-        var receiver = "";
-        //Js code here
-        function enterUserName() {
-            var username = $('#username').val();
-            //save my name to global variable
-            sender = username
-                //send username to server
-            io.emit('user_connected', {
-                username: username,
-                importance: 1
-            });
-
-            return false;
-        }
-
-        //Listen to the server
-        io.on('user_connected', (username) => {
-            console.log(username);
-            toastr.info(username + " connected!");
-            var tempuserlist = `<li><button class="btn btn-xs btn-success" onclick='onUserSelected(this.innerHTML)'>${username}</button></li>`;
-            $('#userlist').append(tempuserlist)
-        });
-
-        //User selected
-        function onUserSelected(username) {
-            console.log('receiver : ---- ' + username);
-            receiver = username;
-        }
-
-
-        //send Message
-        function sendMessage() {
-            var messageContent = $('#message').val();
-            if (receiver == "") {
-                toastr.warning("Veuillez selectionner un destinataire ! ");
-                return false;
-            }
-            if (sender == "") {
-                toastr.warning("Connectez-vous au chat svp ! ");
-                return false;
-            }
-            var data = {
-                sender: sender,
-                receiver: receiver,
-                message: messageContent
-            };
-            io.emit('send_message', {
-                sender: sender,
-                receiver: receiver,
-                message: messageContent
-            });
-            var tempnewmessage = "<li> You say :  " + messageContent + '</li>';
-            $('#messagelist').append(tempnewmessage);
-            return false;
-        }
-
-        //new message received 
-        io.on('new_message', function(data) {
-            var tempnewmessage = "<li>" + data.sender + " say :  " + data.message + '</li>';
-            $('#messagelist').append(tempnewmessage);
-        });
-    </script>
+    <script src="assets/main/personal-chat.js"></script>
 
 </body>
 

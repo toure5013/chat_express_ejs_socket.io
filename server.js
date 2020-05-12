@@ -4,17 +4,24 @@ const express = require('express');
 const app = express(); //cette est pareil const app = require('express')();
 const http = require('http').createServer(app);
 const io = require('socket.io')(http);
+var bodyParser = require('body-parser');
 
 //mysqlconfig file
 const connection = require('./utils/mysqlconfig').connection;
 
+//routes files 
+const routes = require('./routes');
 //Middleware
 app.set('view engine', 'ejs');
 app.use(express.static(__dirname + '/PUBLIC'));
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    next();
+});
 
-app.get("/", (req, res) => {
-    res.render("index")
-})
 
 
 
@@ -24,9 +31,11 @@ connection.connect(function(err) {
         console.error('error to connect to mysql server, verify that you have run your mysql server: ' + err.stack);
         return;
     }
-
     console.log("connected to mysql with success");
 });
+
+//Routes
+routes.routesListe(app, connection);
 
 
 //Userlist
@@ -58,7 +67,7 @@ io.sockets.on('connection', (socket) => {
         var datatoinsert = [data.sender, data.receiver, data.message];
         connection.query(insertreq, datatoinsert, function(error, results, fields) {
             if (error) throw error;
-            console.log("success " + results)
+            console.log("success " + results);
         });
     })
 
@@ -67,9 +76,9 @@ io.sockets.on('connection', (socket) => {
     socket.on('disconnect', () => {
         console.log("User disconnected with socket id :  " + socket.id);
         io.emit('newUser', 'Un nouveau utilisateur s\'est déconnecter')
-    })
-})
+    });
+});
 
 http.listen(PORT, () => {
     console.log("Serveur run on http://localhost:" + PORT);
-})
+});
