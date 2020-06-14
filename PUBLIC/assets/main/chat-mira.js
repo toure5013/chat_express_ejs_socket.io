@@ -8,7 +8,7 @@ const chatBody = document.getElementById('chatBody');
 
 function scrollToBottom() {
     chatBody.scrollTop = chatBody.scrollHeight;
-    $("#chatBody").stop().animate({ scrollTop: $("#chatBody")[0].scrollHeight }, 1000);
+    // $("#chatBody").stop().animate({ scrollTop: $("#chatBody")[0].scrollHeight }, 1000);
 
 }
 
