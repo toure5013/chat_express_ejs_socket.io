@@ -26,3 +26,9 @@ socket.broadcast.to(socketid).emit('message', 'for your eyes only');
 for (var socketid in io.sockets.sockets) {}
  OR
 Object.keys(io.sockets.sockets).forEach((socketid) => {});
+
+
+///
+
+  var redirectUrl = window.location.protocol + '//' + window.location.hostname + ':' + window.location.port + window.location.pathname + '?q=recu';
+                    document.location.href = redirectUrl;

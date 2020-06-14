@@ -23,14 +23,11 @@
 <!-- ../PUBLIC/ -->
 
 <body>
-    <div class="">
 
-    </div>
     <div class="container">
-        <div class="row bt-3">
-
-            <div class="col-md-8 col-lg-8 chat">
-                <div class="card" style="margin:0 auto;">
+        <div class="row center bt-3">
+            <div class="col-md-8 col-lg-6 chat">
+                <div class="card">
                     <div class="card-header msg_head">
                         <div class="d-flex bd-highlight">
                             <div class="img_cont">
@@ -65,51 +62,35 @@
                         <div class="input-group">
                             <div class="input-group-append">
                                 <button class="input-group-text attach_btn">
-                            <i class="fas fa-paperclip"></i>
-                        </button>
+                                    <i class="fas fa-paperclip"></i>
+                                </button>
                             </div>
-                            <textarea name="" id="message" class="form-control type_msg" placeholder="votre message ici"></textarea>
-                            <div class="input-group-append">
-                                <button class="input-group-text send_btn" onclick="sendMessage()">
-                            <i class="fas fa-location-arrow"></i>
-                        </button>
+                            <form onsubmit="return sendMessage()">
+                                <textarea name="" id="msg" class="form-control type_msg" placeholder="votre message ici"></textarea>
+                                <div class="input-group-append">
+                                    <button class="input-group-text send_btn" onclick="envoyerMessage()">
+                                        <i class="fas fa-location-arrow"></i>
+                                    </button>
+                                </div>
+                            </form>
 
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-3 col-md-3 col-lg-3 hidden-xs hidden-sm chat">
-                <div class="card">
-                    <div class="d-flex bd-highlight p-1">
-                        <div class="img_cont">
-                            <img src="assets/images/sender.jpg" class="rounded-circle user_img">
-                            <span class="online_icon"></span>
-                        </div>
-                        <div class="user_info">
-                            <span>Chat Mira </span>
-                            <p> En ligne</p>
-                        </div>
-                    </div>
-                    <div class="d-flex bd-highlight p-1" onclick="console.log('chat avec user2')">
-                        <div class="img_cont">
-                            <img src="assets/images/sender.jpg" class="rounded-circle user_img">
-                            <span class="online_icon"></span>
-                        </div>
-                        <div class="user_info">
-                            <span>Chat Mira </span>
-                            <p> En ligne</p>
+
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
+
     </div>
+
+
 
     <!-- Appelle du module socket -->
     <script src="assets/main/style.js"></script>
     <script src="/socket.io/socket.io.js"></script>
-    <script src="assets/main/chat-mira.js"></script>
+    <script src="assets/main/personal-chat.js"></script>
+
 </body>
 
 </html>

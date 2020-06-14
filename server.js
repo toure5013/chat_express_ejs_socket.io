@@ -9,19 +9,21 @@ var bodyParser = require('body-parser');
 //mysqlconfig file
 const connection = require('./utils/mysqlconfig').connection;
 
-//routes files 
-const routes = require('./routes');
+
 //Middleware
 app.set('view engine', 'ejs');
 app.use(express.static(__dirname + '/PUBLIC'));
 app.use(bodyParser.urlencoded({
     extended: true
 }));
+
 app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Origin', '*');
     next();
 });
 
+//routes files 
+const routes = require('./routes');
 
 
 
@@ -46,7 +48,7 @@ io.sockets.on('connection', (socket) => {
 
     //connect to incoming socket event
     socket.on('user_connected', function(user) {
-        users[user.username] = socket.id;
+        users[user.username] = socket.id; //socket 
 
         console.log(users[user.username]);
         //We'll use socket id to send message to individual user
@@ -57,19 +59,23 @@ io.sockets.on('connection', (socket) => {
         socket.broadcast.emit('user_connected', user.username)
     });
 
-    //listen from client and send message
+    //listen from client (sender) and send message to receiver
     socket.on('send_message', (data) => {
         //send to receiver
-        var socketId = users[data.receiver];
-        console.log(socketId);
-        io.to(socketId).emit('new_message', data);
-        var insertreq = "INSERT INTO messages(sender, receiver, message) VALUES (?,?,?)";
+        // var socketId = users[data.receiver];
+        // console.log(socketId);
+        socket.emit('new_message', data);
+        var insertreq = "INSERT INTO messages-groupe(sender, receiver, message) VALUES (?,?,?)";
         var datatoinsert = [data.sender, data.receiver, data.message];
         connection.query(insertreq, datatoinsert, function(error, results, fields) {
             if (error) throw error;
-            console.log("success " + results);
+            socket.emit("monmsg", data); // envoi ceci à l'utilisateur
+            socket.broadcast.emit("newmsgrecive", data); // envoi ceci à tout les autres
+            console.log("success ");
+            console.info(results);
         });
     })
+
 
 
     //Socket deconnecter

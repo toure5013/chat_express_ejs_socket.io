@@ -1,0 +1,21 @@
+<input type="text" name="msg" id="msg" placeholder="Votre message ici">
+<input type="submit" value="Envoyer" onclick="sendMsg()">
+
+
+<!-- Appelle du module socket -->
+<script src="/socket.io/socket.io.js "></script>
+<script>
+    var socket = io();
+    // Socket code
+    socket.on('botMessage', (message) => {
+        console.log(message);
+    });
+
+    function sendMsg() {
+        var message = document.getElementById('msg').value;
+        console.log(message);
+        socket.emit('newmsg', {
+            message: message
+        });
+    }
+</script>
