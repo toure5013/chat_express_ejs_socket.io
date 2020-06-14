@@ -19,12 +19,6 @@ html {
     background-color: rgba(0, 0, 0, 0.4) !important;
 }
 
-@media (max-width: 600px) {
-    .card {
-        height: 600px;
-    }
-}
-
 .contacts_body {
     padding: 0.75rem 0 !important;
     overflow-y: auto;
