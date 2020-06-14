@@ -3,6 +3,19 @@ var url = window.location.protocol + '//' + window.location.hostname + ':' + win
 
 var io = io(url);
 var date = new Date();
+
+const chatBody = document.getElementById('chatBody');
+
+function scrollToBottom() {
+    chatBody.scrollTop = chatBody.scrollHeight;
+    $("#chatBody").stop().animate({ scrollTop: $("#chatBody")[0].scrollHeight }, 1000);
+
+}
+
+
+scrollToBottom();
+
+
 //params*
 // sessionStorage.setItem("pseudo", "mira");
 var sender = sessionStorage.getItem("pseudo");
@@ -103,8 +116,15 @@ function sendMessage() {
     var tempnewmessage = "<li> You say :  " + messageContent + '</li>';
     $('#messagelist').append(tempnewmessage);
     $('#message').val('');
+    shouldScroll = chatBody.scrollTop + chatBody.clientHeight === chatBody.scrollHeight;
+    // After getting your messages.
+    if (!shouldScroll) {
+        scrollToBottom();
+    }
+    $("#chatBody").stop().animate({ scrollTop: $("#chatBody")[0].scrollHeight }, 1000);
     return false;
 }
+
 
 //new message received 
 io.on('new_message', function(data) {
