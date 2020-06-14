@@ -7,7 +7,8 @@ const io = require('socket.io')(http);
 var bodyParser = require('body-parser');
 const path = require('path');
 //mysqlconfig file
-const connection = require('./utils/mysqlconfig').connection;
+// const connection = require('./utils/mysqlconfig').connection;
+const connection = require('./utils/mysqlconfigprod').connection;
 
 
 //Middleware
