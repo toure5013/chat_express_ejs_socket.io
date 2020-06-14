@@ -102,6 +102,7 @@ function sendMessage() {
     });
     var tempnewmessage = "<li> You say :  " + messageContent + '</li>';
     $('#messagelist').append(tempnewmessage);
+    $('#message').val('');
     return false;
 }
 
