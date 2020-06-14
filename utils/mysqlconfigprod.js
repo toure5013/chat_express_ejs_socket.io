@@ -14,7 +14,7 @@ try {
         password: Password,
         database: Database
     });
-    console.log(this.connection)
+    // console.log(this.connection)
 } catch (error) {
     console.log('! ! ! ! ! !Veuillez lancer le serveur de ma bd !! ! !! ')
 }

@@ -69,6 +69,10 @@ io.sockets.on('connection', (socket) => {
         socket.broadcast.emit('user_connected', user.username)
     });
 
+    //Pad given value to the left with "0"
+    function AddZero(num) {
+        return (num >= 0 && num < 10) ? "0" + num : num + "";
+    }
     //listen from client (sender) and send message to receiver
     socket.on('send_message', (data) => {
         //send to receiver
@@ -76,8 +80,15 @@ io.sockets.on('connection', (socket) => {
         // console.log(socketId);
         socket.emit('new_message', data);
         // SELECT `id`, `pseudo`, `password`, `avatar`
-        var insertreq = "INSERT INTO `messages-groupe`( `sender`, `message`) VALUES (?,?)";
-        var datatoinsert = [data.sender, data.message];
+        var date = new Date();
+        // var date = [
+        //     [AddZero(now.getDate()),
+        //         AddZero(now.getMonth() + 1),
+        //         now.getFullYear()
+        //     ].join("/")
+        // ].join(" ");
+        var insertreq = "INSERT INTO `messages-groupe`( `sender`, `message`, date ) VALUES (?,?, ?)";
+        var datatoinsert = [data.sender, data.message, date];
         connection.query(insertreq, datatoinsert, function(error, results, fields) {
             if (error) throw error;
             socket.emit("monmsg", data); // envoi ceci à l'utilisateur
