@@ -117,7 +117,7 @@ io.on('new_message', function(data) {
 io.on('monmsg', (data) => {
     var temp = `<div class="d-flex justify-content-start mb-4">
         <div class="img_cont_msg">
-            <img src="assets/images/me.png" class="rounded-circle user_img_msg">
+        <img src="assets/images/${sender}.png" class="rounded-circle user_img_msg">
         </div>
         <div class="msg_cotainer">
             ${data.message}
@@ -135,7 +135,7 @@ io.on('newmsgrecive', (data) => {
                         <span class="msg_time_send">${date.getHours()} h:  ${date.getMinutes()} min</span>
                     </div>
                     <div class="img_cont_msg">
-                        <img src="assets/images/other.png" class="rounded-circle user_img_msg">
+                    <img src="assets/images/${data.sender}.png" class="rounded-circle user_img_msg">
                     </div>
                 </div>`
     $('#chatBody').append(temp);
