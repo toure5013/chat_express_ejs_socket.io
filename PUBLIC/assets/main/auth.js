@@ -1,4 +1,4 @@
-var url = "http://localhost:8080"
+var url = window.location.protocol + '//' + window.location.hostname + ':' + window.location.port;
 var socket = io(url);
 
 //User selected
