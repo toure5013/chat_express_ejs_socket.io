@@ -12,8 +12,9 @@ function connexion() {
         pseudo: pseudo,
         password: password
     };
-    // debugger
-    //Get previous message
+    console.info(data)
+        // debugger
+        //Get previous message
     $.ajax({
         type: "POST",
         url: url + '/auth',

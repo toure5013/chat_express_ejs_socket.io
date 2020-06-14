@@ -9,7 +9,7 @@ var receiver = "mira-groupe";
 
 console.log('sender  : ' + sender);
 console.log('receiver  : ' + receiver);
-
+$('#img').attr("src", `${sender}.png`);
 
 //User selected
 function getPreviousMsg() {
@@ -32,7 +32,7 @@ function getPreviousMsg() {
                 if (data.sender == sender) {
                     var temp = `<div class="d-flex justify-content-start mb-4">
                             <div class="img_cont_msg">
-                                <img src="assets/images/me.png" class="rounded-circle user_img_msg">
+                                <img src="assets/images/${data.sender}.png" class="rounded-circle user_img_msg">
                             </div>
                             <div class="msg_cotainer">
                                 ${data.message}
@@ -42,12 +42,15 @@ function getPreviousMsg() {
                     $('#chatBody').append(temp);
                 } else {
                     var temp = `<div class="d-flex justify-content-end mb-4">
+
                             <div class="msg_cotainer_send">
                                 ${data.message}
                                 <span class="msg_time_send">${date.getHours()} h:  ${date.getMinutes()} min</span>
                             </div>
                             <div class="img_cont_msg">
-                                <img src="assets/images/other.png" class="rounded-circle user_img_msg">
+                                <img src="assets/images/${data.sender}.png" class="rounded-circle user_img_msg">
+                                 <span class="mb-1">${data.sender}</span>
+
                             </div>
                         </div>`
                     $('#chatBody').append(temp);

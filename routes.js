@@ -56,7 +56,7 @@ module.exports.routesListe = (app, connection) => {
 
     app.post("/auth", (req, res) => {
 
-        console.log(req)
+        console.log(req.body)
         var connectionReponse = {};
 
         //TO AUTH USER SEND PSEUDO AND PASSWORD
